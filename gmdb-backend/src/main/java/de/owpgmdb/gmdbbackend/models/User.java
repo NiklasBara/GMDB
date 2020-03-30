@@ -1,6 +1,7 @@
 package de.owpgmdb.gmdbbackend.models;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -27,9 +28,9 @@ public class User {
     private String username;
     private UserRole role;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Rating> ratings;
+    private Set<Rating> ratings;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
     public User(String username, UserRole role) {
         this.username = username;
