@@ -1,10 +1,9 @@
-package de.owpgmdb.gmdbbackend;
+package de.owpgmdb.gmdbbackend.persistence;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.hibernate.action.internal.CollectionAction;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,7 +17,7 @@ import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
  * PersistenceTest
  */
 @DataJpaTest
-public class PersistenceTest {
+public class MovieTest {
 
     @Autowired
     MovieRepository movieRepo;
@@ -109,12 +108,5 @@ public class PersistenceTest {
         Assertions.assertThat(actual.getRatings()).isEqualTo(dbEntry.getRatings());
     }
 
-    // @Test
-    // void canUpdateReviewFromMovie(){
-    //     Movie newMovie = new Movie("Parasite", 2019L);
-    //     Review newReview = new Review("Good");
-    // }
-
-    
 
 }
