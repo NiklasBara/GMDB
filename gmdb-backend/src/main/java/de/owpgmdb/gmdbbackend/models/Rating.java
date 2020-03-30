@@ -18,5 +18,11 @@ public class Rating {
     private Long id;
 
     private int score;
+
+    public Rating(int score) {
+        this.score = score;
+    }
+
+    
     
 }

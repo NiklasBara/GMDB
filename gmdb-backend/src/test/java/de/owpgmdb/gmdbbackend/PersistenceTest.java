@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import de.owpgmdb.gmdbbackend.models.Movie;
+import de.owpgmdb.gmdbbackend.models.Rating;
 import de.owpgmdb.gmdbbackend.models.Review;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
 
@@ -65,6 +66,20 @@ public class PersistenceTest {
     }
 
     @Test
+    void canUpdateMovie(){
+        Movie newMovie = new Movie("Parasite", 2019L);
+        this.movieRepo.save(newMovie);
+        Movie dbEntry = this.movieRepo.findById(newMovie.getId()).orElseThrow(()-> new AssertionError("Movie not found"));
+        dbEntry.setTitle("Knives Out");
+        dbEntry.setReleaseYear(2020L);
+        this.movieRepo.save(dbEntry);
+        Movie actual = this.movieRepo.findById(newMovie.getId()).orElseThrow(()-> new AssertionError("Movie not found"));
+
+        Assertions.assertThat(actual).isEqualTo(dbEntry);
+
+    }
+
+    @Test
     void canAddReviewToMovie(){
         Movie newMovie = new Movie("Parasite", 2019L);
         Review newReview = new Review("Good");
@@ -79,5 +94,27 @@ public class PersistenceTest {
         Assertions.assertThat(actual.getReviews()).isEqualTo(dbEntry.getReviews());
     }
 
+    @Test
+    void canAddRatingToMovie(){
+        Movie newMovie = new Movie("Parasite", 2019L);
+        Rating newRating = new Rating(5);
+
+        this.movieRepo.save(newMovie);
+        Movie dbEntry = this.movieRepo.findById(newMovie.getId()).orElseThrow(()-> new AssertionError("Movie not found"));
+        dbEntry.getRatings().add(newRating);
+        this.movieRepo.save(dbEntry);
+        Movie actual = this.movieRepo.findById(newMovie.getId()).orElseThrow(()-> new AssertionError("Movie not found"));
+
+        Assertions.assertThat(actual.getRatings()).hasSize(1);
+        Assertions.assertThat(actual.getRatings()).isEqualTo(dbEntry.getRatings());
+    }
+
+    // @Test
+    // void canUpdateReviewFromMovie(){
+    //     Movie newMovie = new Movie("Parasite", 2019L);
+    //     Review newReview = new Review("Good");
+    // }
+
+    
 
 }
