@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import de.owpgmdb.gmdbbackend.models.Movie;
+import de.owpgmdb.gmdbbackend.models.Review;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
 
 /**
@@ -22,23 +23,23 @@ public class PersistenceTest {
     MovieRepository movieRepo;
 
     @Test
-    void dependenciesAreNotNull(){
+    void dependenciesAreNotNull() {
         Assertions.assertThat(this.movieRepo).isNotNull();
     }
 
     @Test
-    void movieRepoIsEmptyWhenNothingIsAdded(){
-        //S SETUP
+    void movieRepoIsEmptyWhenNothingIsAdded() {
+        // S SETUP
         List<Movie> expected = Collections.emptyList();
-        //E Excersise
+        // E Excersise
         List<Movie> actual = this.movieRepo.findAll();
-        //A Assert
+        // A Assert
         Assertions.assertThat(actual).isEqualTo(expected);
-        //(T Teardown)
+        // (T Teardown)
     }
 
     @Test
-    void canAddMoviesToMovieRepo(){
+    void canAddMoviesToMovieRepo() {
         Movie newMovie = new Movie("Parasite", 2019L);
 
         this.movieRepo.save(newMovie);
@@ -51,18 +52,32 @@ public class PersistenceTest {
     }
 
     @Test
-    void canDeleteMoviesFromMovieRepo(){
+    void canDeleteMoviesFromMovieRepo() {
         Movie newMovie = new Movie("Parasite", 2019L);
         List<Movie> expected = Collections.emptyList();
 
         this.movieRepo.save(newMovie);
         this.movieRepo.deleteById(newMovie.getId());
         List<Movie> actual = this.movieRepo.findAll();
-        
+
         Assertions.assertThat(actual).isEqualTo(expected);
 
-       
     }
 
-    
+    @Test
+    void canAddReviewToMovie(){
+        Movie newMovie = new Movie("Parasite", 2019L);
+        Review newReview = new Review("Good");
+
+        this.movieRepo.save(newMovie);
+        Movie dbEntry = this.movieRepo.findById(newMovie.getId()).orElseThrow(()-> new AssertionError("Movie not found"));
+        dbEntry.getReviews().add(newReview);
+        this.movieRepo.save(dbEntry);
+        Movie actual = this.movieRepo.findById(newMovie.getId()).orElseThrow(()-> new AssertionError("Movie not found"));
+
+        Assertions.assertThat(actual.getReviews()).hasSize(1);
+        Assertions.assertThat(actual.getReviews()).isEqualTo(dbEntry.getReviews());
+    }
+
+
 }
