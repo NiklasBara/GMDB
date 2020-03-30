@@ -6,21 +6,32 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import de.owpgmdb.gmdbbackend.controllers.MovieController;
+import de.owpgmdb.gmdbbackend.models.Movie;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
+
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.*;
 /**
  * MovieControllerTests
  */
 @WebMvcTest(MovieController.class)
 public class MovieControllerTests {
 
-    @Autowired
+    
     @MockBean
     MovieRepository movieRepository;
 
@@ -28,40 +39,31 @@ public class MovieControllerTests {
 	private MockMvc mvc;
 
 
-    //      private Long id;
-    //      private String title;
-    //      private Long releaseYear;
-    //      private List<Rating> ratings;
-    //      private List<Review> reviews;
-    private String jsonReturn = "
-    [
-        {
-            { \"id\": 1},
-            { \"title\": \"Alice im Wunderland\"},
-            { \"releaseYear\": 2020},
-        },
-        {
-            { \"id\": 2},
-            { \"title\": \"Alice im Wunderland2\"},
-            { \"releaseYear\": 2022},
-        }
-        ]
-    ";    
         
     @Test
-    void canGetAllMoviesFromDataBase() throws Exception {""
+    void canGetAllMoviesFromDataBase() throws Exception {
+        List<Movie> returnList = new ArrayList<>();
+        returnList.add(new Movie("Alice im Wunderland", 2020L));
+        returnList.add(new Movie("Alice im Wunderland2", 2022L));
+        returnList.add(new Movie("Alice im Wunderland3", 2022L));
+        
+        when(this.movieRepository.findAll()).thenReturn(returnList);
+   
 
-      
-       // when(listMock.add(anyString())).thenReturn(false);
- 
-        
-        given(this.movieRepository.findAll()).willReturn(jsonReturn);
-        
-        mvc.perform(get("/api/movies"))
+        mvc.perform(get("/movies"))
+           // .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-			.andExpect(jsonPath("$.movies").isArray())
-            .andExpect(jsonPath("$.movies", hasSize(2)))
-            .andExpect(jsonPath("$.movies[0].id", is(1)));
+			.andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$", hasSize(3)))
+            .andExpect(jsonPath("$", is(1)));
+
+        // mvc.perform(.get("/api/movies")
+        //    .accept(MediaType.APPLICATION_JSON))
+        //    .andDo(print())
+        //    .andExpect(status().isOk())
+        //    .andExpect(jsonPath("$.movies").exists())
+        //    .andExpect(jsonPath("$.movies[*].movie").isNotEmpty());
+     
     }
     
 }
