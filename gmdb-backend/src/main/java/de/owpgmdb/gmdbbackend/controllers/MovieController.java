@@ -14,15 +14,11 @@ import de.owpgmdb.gmdbbackend.models.dtos.MovieDTO;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api")
 public class MovieController {
 
     @Autowired
     private MovieRepository movieRepository;
-
-    // public MovieController(MovieRepository movieRepository) {
-    //     this.movieRepository = movieRepository;
-    // }
 
     @GetMapping("/movies")
     public List<MovieDTO> getAllMovies() {
