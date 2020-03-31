@@ -1,5 +1,6 @@
 package de.owpgmdb.gmdbbackend.models;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-public class Movie {
+public class Movie implements Reviewable {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -32,6 +33,11 @@ public class Movie {
     public Movie(String title, Long releaseYear) {
         this.title = title;
         this.releaseYear = releaseYear;
+    }
+
+    @Override
+    public void addReview(Review review) {
+        this.reviews.add(review);
     }
 
 }

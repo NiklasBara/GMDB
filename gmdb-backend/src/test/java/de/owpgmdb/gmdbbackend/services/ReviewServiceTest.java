@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import de.owpgmdb.gmdbbackend.models.Movie;
 import de.owpgmdb.gmdbbackend.models.Review;
 import de.owpgmdb.gmdbbackend.models.User;
 import de.owpgmdb.gmdbbackend.models.UserRole;
@@ -62,29 +63,65 @@ public class ReviewServiceTest {
     @Test
     void canAddReviewToStoredUser() {
 
-
+        long movieId = 0;
         long userId = 0;
         User user = Mockito.mock(User.class);
         user.setUsername("username");
         user.setRole(UserRole.REVIEWER);
         user.setId(userId);
         when(this.userRepo.findById(userId)).thenReturn(Optional.of(user));
-        
+        when(this.movieRepo.findById(movieId)).thenReturn(Optional.of(new Movie()));
+
         Review review = new Review("Very Good");
 
 
-        this.service.addReview(userId, 0L, review);
+        this.service.addReview(userId, movieId, review);
 
         verify(user).addReview(review);
         verify(this.userRepo).save(user);
     }
+    
 
     @Test
     void givenUserIdNotFoundThrowsIllegalArgException() {
         long userId = 0;
+        long movieId = 0;
         when(this.userRepo.findById(userId)).thenReturn(Optional.empty());
+        when(this.movieRepo.findById(movieId)).thenReturn(Optional.of(new Movie()));
 
-        Exception actual = assertThrows(NoSuchElementException.class, () -> this.service.addReview(userId, 0L, new Review()));
+        Exception actual = assertThrows(NoSuchElementException.class, () -> this.service.addReview(userId, movieId, new Review()));
         Assertions.assertThat(actual).hasMessage("User not found");
+    }
+
+    @Test
+    void canAddReviewToStoredMovie() {
+
+        long userId = 0;
+        long movieId = 0;
+        Movie movie = Mockito.mock(Movie.class);
+        movie.setTitle("title");
+        movie.setReleaseYear(2020L);
+        movie.setId(movieId);
+        when(this.userRepo.findById(userId)).thenReturn(Optional.of(new User()));
+        when(this.movieRepo.findById(movieId)).thenReturn(Optional.of(movie));
+
+        Review review = new Review("Very Good");
+
+
+        this.service.addReview(userId, movieId, review);
+
+        verify(movie).addReview(review);
+        verify(this.movieRepo).save(movie);
+    }
+
+    @Test
+    void givenMovieIdNotFoundThrowsIllegalArgException() {
+        long movieId = 0;
+        long userId = 0;
+        when(this.movieRepo.findById(movieId)).thenReturn(Optional.empty());
+        when(this.userRepo.findById(userId)).thenReturn(Optional.of(new User()));
+
+        Exception actual = assertThrows(NoSuchElementException.class, () -> this.service.addReview(userId, movieId, new Review()));
+        Assertions.assertThat(actual).hasMessage("Movie not found");
     }
 }

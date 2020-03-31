@@ -1,13 +1,13 @@
 package de.owpgmdb.gmdbbackend.services;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import de.owpgmdb.gmdbbackend.models.Review;
-import de.owpgmdb.gmdbbackend.models.User;
+import de.owpgmdb.gmdbbackend.models.Reviewable;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
 
@@ -26,15 +26,16 @@ public class ReviewService {
         if (review == null) {
             throw new IllegalArgumentException("Review must not be null");
         }
-
-        //TODO refactor
-        User user = this.userRepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
-        user.addReview(review);
-        userRepo.save(user);
+        saveReviewIntoRepository(this.userRepo, userId, review, "User not found");
+        saveReviewIntoRepository(this.movieRepo, movieId, review, "Movie not found");
 
         return null;
+    }
 
-        
+    private <T extends Reviewable> void saveReviewIntoRepository(JpaRepository<T, Long> repo, Long id, Review review, String errorMessage) {
+        T dbEntry = repo.findById(id).orElseThrow(() -> new NoSuchElementException(errorMessage));
+        dbEntry.addReview(review);
+        repo.save(dbEntry);
     }
 
 }

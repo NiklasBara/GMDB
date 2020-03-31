@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-public class User {
+public class User implements Reviewable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,8 +39,9 @@ public class User {
         this.role = role;
     }
 
-	public void addReview(Review review) {
+    @Override
+    public void addReview(Review review) {
         this.reviews.add(review);
-	}
-    
+    }
+
 }
