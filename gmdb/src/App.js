@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./component/Home";
+import MovieOverview from "./component/MovieOverview";
 
-function App() {
+const data = [
+  {
+    id: 1,
+    title: "Star Wars",
+    year: 2000,
+    genre: "Fantasy",
+    runtime: 300,
+    rating: 5.5
+  },
+  {
+    id: 2,
+    title: "King Kong",
+    year: 2100,
+    genre: "Fantasy",
+    runtime: 280,
+    rating: 3.1
+  }
+];
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/movie">
+          <MovieOverview data={data} />
+        </Route>
+        <Route path="/" component={Home} />
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;
