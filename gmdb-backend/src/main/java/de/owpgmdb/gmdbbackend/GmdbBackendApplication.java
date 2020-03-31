@@ -2,7 +2,6 @@ package de.owpgmdb.gmdbbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(scanBasePackages = {"de.owpgmdb.gmdbbackend"})
 public class GmdbBackendApplication {

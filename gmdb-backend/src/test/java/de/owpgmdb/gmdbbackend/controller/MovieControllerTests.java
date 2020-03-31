@@ -61,47 +61,47 @@ public class MovieControllerTests {
             .andExpect(jsonPath("$[1].releaseYear", is(2022)));     
     }
 
-    // @Test
-    // void canGetAverageRatingOfMoviesFromDatabase() throws Exception {
-    //     Movie movie = new Movie("Test", 2019L);
-    //     movie.setId(1L);
-    //     Rating rating1 = new Rating();
-    //     rating1.setScore(5);
-    //     Rating rating2 = new Rating();
-    //     rating2.setScore(4);
-    //     Rating rating3 = new Rating();
-    //     rating3.setScore(3);
-    //     Rating rating4 = new Rating();
-    //     rating4.setScore(2);
-    //     movie.getRatings().addAll(Arrays.asList(rating1,rating2,rating3,rating4));
-    //     List<Movie> returnList = new ArrayList<>();
-    //     returnList.add(movie);
+    @Test
+    void canGetAverageRatingOfMoviesFromDatabase() throws Exception {
+        Movie movie = new Movie("Test", 2019L);
+        movie.setId(1L);
+        Rating rating1 = new Rating();
+        rating1.setScore(5);
+        Rating rating2 = new Rating();
+        rating2.setScore(4);
+        Rating rating3 = new Rating();
+        rating3.setScore(3);
+        Rating rating4 = new Rating();
+        rating4.setScore(2);
+        movie.getRatings().addAll(Arrays.asList(rating1,rating2,rating3,rating4));
+        List<Movie> returnList = new ArrayList<>();
+        returnList.add(movie);
 
-    //     when(this.movieRepository.findAll()).thenReturn(returnList);
+        when(this.movieRepository.findAll()).thenReturn(returnList);
 
-    //     mvc.perform(get("/movies"))
-    //     .andExpect(status().isOk())
-    //     .andExpect(jsonPath("$").isArray())
-    //     .andExpect(jsonPath("$", hasSize(1)))
-    //     .andExpect(jsonPath("$[0].averageRating", is(3.5)));
+        mvc.perform(get("/movies"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$[0].averageRating", is(3.5)));
     
-    // }   
+    }   
 
-    // @Test
-    // void canGetSingleMovieFromDataBaseIncludingReviewsOfFilm() throws Exception{
-    //     Movie movie = new Movie("Alice im Wunderland", 2020L);
-    //     movie.setId(1L);
-    //     movie.getReviews().add(new Review("Super Film"));
-    //     movie.getReviews().add(new Review("Super Toller Film"));
+    @Test
+    void canGetSingleMovieFromDataBaseIncludingReviewsOfFilm() throws Exception{
+        Movie movie = new Movie("Alice im Wunderland", 2020L);
+        movie.setId(1L);
+        movie.getReviews().add(new Review("Super Film"));
+        movie.getReviews().add(new Review("Super Toller Film"));
         
-    //     when(this.movieRepository.getOne(movie.getId())).thenReturn(movie);
+        when(this.movieRepository.getOne(movie.getId())).thenReturn(movie);
 
-    //     mvc.perform(get("/movies/1"))
-    //         .andExpect(status().isOk())
-    //         .andExpect(jsonPath("$.id", is(1)))
-    //         .andExpect(jsonPath("$.averageRating", is(-1.0)))
-    //         .andExpect(jsonPath("$.reviews").isArray())
-    //         .andExpect(jsonPath("$.reviews", hasSize(2)))
-    //         .andExpect(jsonPath("$.reviews[*].text", containsInAnyOrder("Super Film","Super Toller Film")));     
-    // }
+        mvc.perform(get("/movies/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", is(1)))
+            .andExpect(jsonPath("$.averageRating", is(-1.0)))
+            .andExpect(jsonPath("$.reviews").isArray())
+            .andExpect(jsonPath("$.reviews", hasSize(2)))
+            .andExpect(jsonPath("$.reviews[*].text", containsInAnyOrder("Super Film","Super Toller Film")));     
+    }
 }
