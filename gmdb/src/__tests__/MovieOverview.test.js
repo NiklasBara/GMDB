@@ -1,8 +1,12 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import MovieOverview from "../component/MovieOverview";
+import rootReducer from "../reducer/rootReducer";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import {act} from "react-dom/test-utils";
 
-const data = [
+const fakeData = [
   {
     id: 1,
     title: "Star Wars",
@@ -23,8 +27,18 @@ const data = [
 
 let component;
 
-beforeEach(() => {
-  component = render(<MovieOverview data={data} />);
+beforeEach(async() => {
+  const store = createStore(rootReducer, applyMiddleware(thunk));
+  const mockSuccesResponse = fakeData;
+  const mockJsonPromise = Promise.resolve(mockSuccesResponse);
+  const mockFetchPromise = Promise.resolve({
+      json: () => mockJsonPromise,
+  });
+  jest.spyOn(global, 'fetch').mockImplementation(() => mockFetchPromise);
+
+    await act(async () => {
+       component = render(<MovieOverview store={store} />);
+    })
 });
 
 test("renders several movieItems in a table", () => {

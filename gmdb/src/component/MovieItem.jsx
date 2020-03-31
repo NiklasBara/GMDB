@@ -14,9 +14,3 @@ const MovieItem = props => {
 };
 
 export default MovieItem;
-// id: 1,
-// title: "Star Wars",
-// year: 2000,
-// genre: "Fantasy",
-// runtime: 300,
-// rating: 5.5
