@@ -1,5 +1,6 @@
 package de.owpgmdb.gmdbbackend.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -29,9 +30,9 @@ public class User {
     private String username;
     private UserRole role;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Rating> ratings;
+    private Set<Rating> ratings = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Review> reviews;
+    private Set<Review> reviews = new HashSet<>();
 
     public User(String username, UserRole role) {
         this.username = username;
