@@ -5,14 +5,18 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.util.Arrays;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import de.owpgmdb.gmdbbackend.controllers.UserController;
@@ -21,6 +25,8 @@ import de.owpgmdb.gmdbbackend.models.Review;
 import de.owpgmdb.gmdbbackend.models.User;
 import de.owpgmdb.gmdbbackend.models.UserRole;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
+
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * UserControllerTests
@@ -32,8 +38,15 @@ public class UserControllerTests {
     @MockBean
     UserRepository userRepository;
 
+
+    @Autowired
+    UserRepository userReal;
+
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+	ObjectMapper objectMapper;
     
     @Test
     void canGetSingleUserFromDatabaseIncludingAllInformationAndReviews() throws Exception{
@@ -52,7 +65,7 @@ public class UserControllerTests {
         
         when(this.userRepository.getOne(user.getId())).thenReturn(user);
 
-        mvc.perform(get("/api/users/1"))
+        mvc.perform(get("/api/user/1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.reviews").isArray())
@@ -61,5 +74,37 @@ public class UserControllerTests {
             .andExpect(jsonPath("$.ratings", hasSize(2)))
             .andExpect(jsonPath("$.username", is("Marc Jaber")))
             .andExpect(jsonPath("$.role", is("REVIEWER")));
+    }
+
+    @Test
+    void canInsertUserIntoDBWhenUsernameNotYetUsed() throws Exception {
+        User user = new User("Marc Jaber", UserRole.REVIEWER);
+        User returnUser = new User("Marc Jaber", UserRole.REVIEWER);
+        returnUser.setId(1L);
+
+        when(this.userRepository.save(user)).thenReturn(returnUser);
+
+        assertThat(user.getId()).isNull();
+
+        this.mvc.perform(post("/api/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(asJsonString(user)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username", is("Marc Jaber")))
+            .andExpect(jsonPath("$.id", is(1)));
+    }
+
+    @Test
+    void canNotInsertUserIntoDBWhenUserNameAlreadyInUse() {
+        //ConstraintViolationException 
+    }
+        
+    private String asJsonString(final Object obj) {
+        try {
+            return objectMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
