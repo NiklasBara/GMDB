@@ -1,7 +1,6 @@
 package de.owpgmdb.gmdbbackend.models;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -28,7 +27,7 @@ public class Movie {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Rating> ratings = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Review> reviews = new HashSet<>();;
+    private Set<Review> reviews = new HashSet<>();
 
     public Movie(String title, Long releaseYear) {
         this.title = title;

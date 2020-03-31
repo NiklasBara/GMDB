@@ -20,7 +20,7 @@ import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
 public class MovieTest {
 
     @Autowired
-    MovieRepository movieRepo;
+    private MovieRepository movieRepo;
 
     @Test
     void dependenciesAreNotNull() {
