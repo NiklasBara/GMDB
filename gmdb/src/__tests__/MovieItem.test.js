@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import MovieItem from "./MovieItem";
+import MovieItem from "../component/MovieItem";
 
 const data = {
   id: 1,

@@ -1,6 +1,6 @@
 import React from "react";
-import { render, getByText } from "@testing-library/react";
-import MovieOverview from "./MovieOverview";
+import { render } from "@testing-library/react";
+import MovieOverview from "../component/MovieOverview";
 
 const data = [
   {
