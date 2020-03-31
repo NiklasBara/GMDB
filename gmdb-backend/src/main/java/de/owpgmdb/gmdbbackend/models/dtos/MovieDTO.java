@@ -1,6 +1,8 @@
 package de.owpgmdb.gmdbbackend.models.dtos;
 
-import de.owpgmdb.gmdbbackend.models.Movie;
+import java.util.Set;
+
+import de.owpgmdb.gmdbbackend.models.Review;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -22,6 +24,7 @@ public class MovieDTO {
     private Long releaseYear;
 
     private Double averageRating;
+    private Set<Review> reviews;
 
     
 }

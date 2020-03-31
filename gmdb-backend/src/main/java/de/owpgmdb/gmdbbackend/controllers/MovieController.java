@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,21 +30,26 @@ public class MovieController {
         .stream()
         .map(movie -> {
             MovieDTO movieDTO = new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear());
-            movieDTO.setAverageRating(movie.getRatings()
+            return calculateAverageRating(movieDTO, movie);})
+        .collect(Collectors.toList());
+    }
+
+    private MovieDTO calculateAverageRating(MovieDTO movieDTO, Movie movie) {
+         movieDTO.setAverageRating(movie.getRatings()
                 .stream()
                 .mapToInt(rating -> rating.getScore())
                 .average()
                 .orElse(-1.0));
-                return movieDTO;})
-        .collect(Collectors.toList());
+        return movieDTO;
+        
     }
 
-    public MovieRepository getMovieRepository() {
-        return movieRepository;
+    @GetMapping("/movies/{id}")
+    public MovieDTO getMovieById(@PathVariable Long id) {
+        Movie movie = movieRepository.getOne(id);
+        MovieDTO movieDTO = calculateAverageRating(new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear()), movie);
+        movieDTO.setReviews(movie.getReviews());
+        
+        return  movieDTO;
     }
-
-    public void setMovieRepository(MovieRepository movieRepository) {
-        this.movieRepository = movieRepository;
-    }
-
 }

@@ -1,33 +1,28 @@
 package de.owpgmdb.gmdbbackend.controller;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-import org.hamcrest.collection.IsArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import de.owpgmdb.gmdbbackend.controllers.MovieController;
 import de.owpgmdb.gmdbbackend.models.Movie;
 import de.owpgmdb.gmdbbackend.models.Rating;
+import de.owpgmdb.gmdbbackend.models.Review;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
-
-
-import static org.mockito.Mockito.*;
-import static org.mockito.Matchers.*;
 /**
  * MovieControllerTests
  */
@@ -91,4 +86,22 @@ public class MovieControllerTests {
         .andExpect(jsonPath("$[0].averageRating", is(3.5)));
     
     }   
+
+    @Test
+    void canGetSingleMovieFromDataBaseIncludingReviewsOfFilm() throws Exception{
+        Movie movie = new Movie("Alice im Wunderland", 2020L);
+        movie.setId(1L);
+        movie.getReviews().add(new Review("Super Film"));
+        movie.getReviews().add(new Review("Super Toller Film"));
+        
+        when(this.movieRepository.getOne(movie.getId())).thenReturn(movie);
+
+        mvc.perform(get("/movies/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", is(1)))
+            .andExpect(jsonPath("$.averageRating", is(-1.0)))
+            .andExpect(jsonPath("$.reviews").isArray())
+            .andExpect(jsonPath("$.reviews", hasSize(2)))
+            .andExpect(jsonPath("$.reviews[*].text", containsInAnyOrder("Super Film","Super Toller Film")));     
+    }
 }
