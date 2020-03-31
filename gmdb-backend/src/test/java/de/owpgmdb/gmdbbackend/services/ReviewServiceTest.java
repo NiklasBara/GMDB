@@ -124,4 +124,5 @@ public class ReviewServiceTest {
         Exception actual = assertThrows(NoSuchElementException.class, () -> this.service.addReview(userId, movieId, new Review()));
         Assertions.assertThat(actual).hasMessage("Movie not found");
     }
+
 }
