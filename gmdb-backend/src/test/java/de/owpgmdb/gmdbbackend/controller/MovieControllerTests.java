@@ -45,25 +45,15 @@ public class MovieControllerTests {
         List<Movie> returnList = new ArrayList<>();
         returnList.add(new Movie("Alice im Wunderland", 2020L));
         returnList.add(new Movie("Alice im Wunderland2", 2022L));
-        returnList.add(new Movie("Alice im Wunderland3", 2022L));
         
         when(this.movieRepository.findAll()).thenReturn(returnList);
    
 
         mvc.perform(get("/movies"))
-           // .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
 			.andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$", hasSize(3)))
-            .andExpect(jsonPath("$", is(1)));
-
-        // mvc.perform(.get("/api/movies")
-        //    .accept(MediaType.APPLICATION_JSON))
-        //    .andDo(print())
-        //    .andExpect(status().isOk())
-        //    .andExpect(jsonPath("$.movies").exists())
-        //    .andExpect(jsonPath("$.movies[*].movie").isNotEmpty());
-     
+            .andExpect(jsonPath("$", hasSize(2)))
+            .andExpect(jsonPath("$[0].title", is("Alice im Wunderland")));     
     }
     
 }
