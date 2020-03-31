@@ -1,5 +1,6 @@
 package de.owpgmdb.gmdbbackend.services;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,14 @@ public class ReviewService {
             throw new IllegalArgumentException("Review must not be null");
         }
 
-        Optional<User> userOpt = this.userRepo.findById(userId);
-        User user = userOpt.get();
+        //TODO refactor
+        User user = this.userRepo.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
         user.addReview(review);
         userRepo.save(user);
 
         return null;
 
-        //bin gleich zurück
+        
     }
 
 }

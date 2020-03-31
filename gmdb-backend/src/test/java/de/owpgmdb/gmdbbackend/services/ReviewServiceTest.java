@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -49,7 +50,7 @@ public class ReviewServiceTest {
      * N - return - X, params: review -> IllegalArg Z - X O - One - Only one review
      * can be added per user M - X B - X I - Review addReview(userId, movieId,
      * review) E - IllegalArgs bei Null Review / More than one Review S - Simple
-     * Cases
+     * Cases / IlleagalArg if Movie or User not found
      */
 
     @Test
@@ -73,8 +74,17 @@ public class ReviewServiceTest {
 
 
         this.service.addReview(userId, 0L, review);
-        
+
         verify(user).addReview(review);
         verify(this.userRepo).save(user);
+    }
+
+    @Test
+    void givenUserIdNotFoundThrowsIllegalArgException() {
+        long userId = 0;
+        when(this.userRepo.findById(userId)).thenReturn(Optional.empty());
+
+        Exception actual = assertThrows(NoSuchElementException.class, () -> this.service.addReview(userId, 0L, new Review()));
+        Assertions.assertThat(actual).hasMessage("User not found");
     }
 }
