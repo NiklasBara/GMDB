@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.hamcrest.collection.IsArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -45,8 +46,12 @@ public class MovieControllerTests {
     @Test
     void canGetAllMoviesFromDataBase() throws Exception {
         List<Movie> returnList = new ArrayList<>();
-        returnList.add(new Movie("Alice im Wunderland", 2020L));
-        returnList.add(new Movie("Alice im Wunderland2", 2022L));
+        Movie movie1 = new Movie("Alice im Wunderland", 2020L);
+        Movie movie2 = new Movie("Alice im Wunderland2", 2022L);
+        movie1.setId(1L);
+        movie2.setId(2L);
+        returnList.add(movie1);
+        returnList.add(movie2);
         
         when(this.movieRepository.findAll()).thenReturn(returnList);
    
@@ -64,7 +69,7 @@ public class MovieControllerTests {
     @Test
     void canGetAverageRatingOfMoviesFromDatabase() throws Exception {
         Movie movie = new Movie("Test", 2019L);
-        movie.setRatings(new HashSet<>());
+        movie.setId(1L);
         Rating rating1 = new Rating();
         rating1.setScore(5);
         Rating rating2 = new Rating();
@@ -73,9 +78,17 @@ public class MovieControllerTests {
         rating3.setScore(3);
         Rating rating4 = new Rating();
         rating4.setScore(2);
-
         movie.getRatings().addAll(Arrays.asList(rating1,rating2,rating3,rating4));
         List<Movie> returnList = new ArrayList<>();
         returnList.add(movie);
+
+        when(this.movieRepository.findAll()).thenReturn(returnList);
+
+        mvc.perform(get("/movies"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$[0].averageRating", is(3.5)));
+    
     }   
 }
