@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import de.owpgmdb.gmdbbackend.controllers.MovieController;
 import de.owpgmdb.gmdbbackend.models.Movie;
+import de.owpgmdb.gmdbbackend.models.Rating;
 import de.owpgmdb.gmdbbackend.repositories.MovieRepository;
 
 
@@ -53,7 +55,27 @@ public class MovieControllerTests {
             .andExpect(status().isOk())
 			.andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$", hasSize(2)))
-            .andExpect(jsonPath("$[0].title", is("Alice im Wunderland")));     
+            .andExpect(jsonPath("$[0].title", is("Alice im Wunderland")))    
+            .andExpect(jsonPath("$[0].releaseYear", is(2020))) 
+            .andExpect(jsonPath("$[1].title", is("Alice im Wunderland2")))     
+            .andExpect(jsonPath("$[1].releaseYear", is(2022)));     
     }
-    
+
+    @Test
+    void canGetAverageRatingOfMoviesFromDatabase() throws Exception {
+        Movie movie = new Movie("Test", 2019L);
+        movie.setRatings(new HashSet<>());
+        Rating rating1 = new Rating();
+        rating1.setScore(5);
+        Rating rating2 = new Rating();
+        rating2.setScore(4);
+        Rating rating3 = new Rating();
+        rating3.setScore(3);
+        Rating rating4 = new Rating();
+        rating4.setScore(2);
+
+        movie.getRatings().addAll(Arrays.asList(rating1,rating2,rating3,rating4));
+        List<Movie> returnList = new ArrayList<>();
+        returnList.add(movie);
+    }   
 }
