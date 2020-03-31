@@ -40,6 +40,7 @@ public class User {
     }
 
 	public void addReview(Review review) {
+        this.reviews.add(review);
 	}
     
 }
