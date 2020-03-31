@@ -56,7 +56,7 @@ public class PersistenceTest {
         List<Movie> expected = Collections.emptyList();
 
         this.movieRepo.save(newMovie);
-       // this.movieRepo.deleteById(newMovie.getId());
+        this.movieRepo.deleteById(newMovie.getId());
         List<Movie> actual = this.movieRepo.findAll();
         
         Assertions.assertThat(actual).isEqualTo(expected);
