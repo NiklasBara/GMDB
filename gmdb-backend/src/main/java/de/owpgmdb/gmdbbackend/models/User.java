@@ -1,9 +1,9 @@
 package de.owpgmdb.gmdbbackend.models;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,6 +25,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(unique = true)
     private String username;
     private UserRole role;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
