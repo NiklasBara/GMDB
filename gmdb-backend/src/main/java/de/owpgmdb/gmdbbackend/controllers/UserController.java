@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.owpgmdb.gmdbbackend.models.Login;
 import de.owpgmdb.gmdbbackend.models.User;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
 import de.owpgmdb.gmdbbackend.services.UserService;
@@ -38,9 +39,15 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @PostMapping("/login")
+   /*  @PostMapping("/login")
     public User loginUser(@RequestBody String username) {
         return userService.loginByUsername(username);
+       
+    } */
+    @PostMapping("/login")
+    public User loginUser(@RequestBody Login login) {
+
+        return userService.loginByUsername(login.getUsername());
        
     }
 

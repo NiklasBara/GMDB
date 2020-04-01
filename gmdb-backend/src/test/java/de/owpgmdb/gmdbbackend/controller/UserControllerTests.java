@@ -120,7 +120,7 @@ public class UserControllerTests {
 
     @Test
     void canGetUserByUsername() throws Exception {
-        String expectedUsername = "Jan"; // body (logindaten)
+        String expectedUsername = "Jan";
         long expectedId = 0L;
         User expected = new User(expectedUsername, UserRole.REVIEWER);
         expected.setId(expectedId);

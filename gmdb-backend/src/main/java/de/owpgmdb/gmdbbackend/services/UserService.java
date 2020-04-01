@@ -3,6 +3,7 @@ package de.owpgmdb.gmdbbackend.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.owpgmdb.gmdbbackend.models.Login;
 import de.owpgmdb.gmdbbackend.models.User;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
 
@@ -29,6 +30,13 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Username could not be found"));
 
     }
+    /* public User loginByUsername(Login username) {
+        checkUsername(username.getUsername());
+
+        return userRepo.findByUsername(username.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("Username could not be found"));
+
+    } */
 
     /**
      * checks username 
