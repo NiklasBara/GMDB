@@ -1,12 +1,12 @@
 const fetchData = (data) => {
     return (
         {
-            type: "FETCH_MOVIE_DATA",
+            type: "FETCH_SINGLE_MOVIE_DATA",
             payload: data,
         }
     );
 }
-const fetchMovieData= (apiUrl) => {
+const fetchSingleMovieData= (apiUrl) => {
     const foo = (dispatch) => {
         fetch(apiUrl)
             .then(res => res.json())
@@ -20,4 +20,4 @@ const fetchMovieData= (apiUrl) => {
     };
     return foo;
 }; 
-export {fetchMovieData}
+export {fetchSingleMovieData}

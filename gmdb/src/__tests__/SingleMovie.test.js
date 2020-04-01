@@ -16,9 +16,11 @@ const fakeData = {
     rating: 5.5,
     reviews: [
         {
+            id: 1,
             text: "was good"
         },
         {
+            id: 2,
             text: "was not good"
         }
     ]
@@ -26,7 +28,7 @@ const fakeData = {
 
 let component;
 
-test("rennders a movie", async() => {
+test("renders a movie", async() => {
     const store = createStore(rootReducer, applyMiddleware(thunk));
     const mockSuccesResponse = fakeData;
     const mockJsonPromise = Promise.resolve(mockSuccesResponse);
@@ -35,22 +37,29 @@ test("rennders a movie", async() => {
     });
     jest.spyOn(global, 'fetch').mockImplementation(() => mockFetchPromise);
 
+    const defaultProps = {
+        params: { id: 123 } ,
+    };
+
     await act(async () => {
-       component = render(<SingleMovie store={store} />);
+       component = render(<SingleMovie match={defaultProps} store={store} />);
     })
-    const { queryAllByTestId,getByText } = component;
-    const review = queryAllByTestId("review-item");
+    const {getByText } = component;
+    const reviewOne = getByText("was good");
+    const reviewTwo = getByText("was not good");
     const id = getByText("1");
     const title = getByText("Star Wars");
     const year = getByText("2000");
     const genre = getByText("Fantasy");
     const runtime = getByText("300");
     const rating = getByText("5.5");
-    expect(review.length).toEqual(2);
+    expect(reviewOne).toBeInTheDocument();
+    expect(reviewTwo).toBeInTheDocument();
     expect(id).toBeInTheDocument();
     expect(title).toBeInTheDocument();
     expect(year).toBeInTheDocument();
     expect(genre).toBeInTheDocument();
     expect(runtime).toBeInTheDocument();
     expect(rating).toBeInTheDocument();
+    
 })

@@ -1,4 +1,6 @@
-const initialState = {};
+const initialState = {
+    reviews: []
+};
 
 const singleMoviereducer = (state = initialState, action) => {
     switch (action.type) {
