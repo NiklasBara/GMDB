@@ -28,6 +28,7 @@ import de.owpgmdb.gmdbbackend.models.Review;
 import de.owpgmdb.gmdbbackend.models.User;
 import de.owpgmdb.gmdbbackend.models.UserRole;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
+import de.owpgmdb.gmdbbackend.services.UserService;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -41,7 +42,6 @@ public class UserControllerTests {
     @MockBean
     UserRepository userRepository;
 
-
     @Autowired
     UserRepository userReal;
 
@@ -49,34 +49,32 @@ public class UserControllerTests {
     private MockMvc mvc;
 
     @Autowired
-	ObjectMapper objectMapper;
-    
+    ObjectMapper objectMapper;
+
+    @MockBean
+    private UserService userService;
+
     @Test
-    void canGetSingleUserFromDatabaseIncludingAllInformationAndReviews() throws Exception{
+    void canGetSingleUserFromDatabaseIncludingAllInformationAndReviews() throws Exception {
         User user = new User("Marc Jaber", UserRole.REVIEWER);
         user.setId(1L);
         Review review1 = new Review("Mega Film");
         Review review2 = new Review("Klasse Film");
-        review1.setId(2L); 
+        review1.setId(2L);
         review2.setId(3L);
         Rating rating1 = new Rating(5);
         Rating rating2 = new Rating(4);
         rating1.setId(4L);
         rating2.setId(5L);
-        user.getReviews().addAll(Arrays.asList(review1,review2));       
-        user.getRatings().addAll(Arrays.asList(rating1,rating2));       
-        
+        user.getReviews().addAll(Arrays.asList(review1, review2));
+        user.getRatings().addAll(Arrays.asList(rating1, rating2));
+
         when(this.userRepository.getOne(user.getId())).thenReturn(user);
 
-        mvc.perform(get("/api/user/1"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.reviews").isArray())
-            .andExpect(jsonPath("$.reviews", hasSize(2)))
-            .andExpect(jsonPath("$.ratings").isArray())
-            .andExpect(jsonPath("$.ratings", hasSize(2)))
-            .andExpect(jsonPath("$.username", is("Marc Jaber")))
-            .andExpect(jsonPath("$.role", is("REVIEWER")));
+        mvc.perform(get("/api/user/1")).andExpect(status().isOk()).andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.reviews").isArray()).andExpect(jsonPath("$.reviews", hasSize(2)))
+                .andExpect(jsonPath("$.ratings").isArray()).andExpect(jsonPath("$.ratings", hasSize(2)))
+                .andExpect(jsonPath("$.username", is("Marc Jaber"))).andExpect(jsonPath("$.role", is("REVIEWER")));
     }
 
     @Test
@@ -89,20 +87,14 @@ public class UserControllerTests {
 
         assertThat(user.getId()).isNull();
 
-        this.mvc.perform(post("/api/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(asJsonString(user)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.username", is("Marc Jaber")))
-            .andExpect(jsonPath("$.id", is(1)));
+        this.mvc.perform(post("/api/user").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                .content(asJsonString(user))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", is("Marc Jaber"))).andExpect(jsonPath("$.id", is(1)));
     }
 
     private void repeatPostRequest(User user) throws Exception {
-        this.mvc.perform(post("/api/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(asJsonString(user))); 
+        this.mvc.perform(post("/api/user").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                .content(asJsonString(user)));
     }
 
     @Test
@@ -114,23 +106,50 @@ public class UserControllerTests {
         returnUser.setId(1L);
 
         when(this.userRepository.save(user)).thenReturn(returnUser);
-        this.mvc.perform(post("/api/user")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .content(asJsonString(user)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.username", is("Marc Jaber")))
-            .andExpect(jsonPath("$.id", is(1)));
-   
+        this.mvc.perform(post("/api/user").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                .content(asJsonString(user))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", is("Marc Jaber"))).andExpect(jsonPath("$.id", is(1)));
+
         when(this.userRepository.findByUsername(user2.getUsername())).thenReturn(Optional.of(returnUser));
 
-        assertThatThrownBy(() -> repeatPostRequest(user2))
-            .isExactlyInstanceOf(NestedServletException.class)
-            .hasCauseExactlyInstanceOf(ConstraintViolationException.class)
-            .hasMessageContaining("Cannot add multiple Users with same username");
-           
+        assertThatThrownBy(() -> repeatPostRequest(user2)).isExactlyInstanceOf(NestedServletException.class)
+                .hasCauseExactlyInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("Cannot add multiple Users with same username");
+
     }
-        
+
+    @Test
+    void canGetUserByUsername() throws Exception {
+        String expectedUsername = "Jan"; // body (logindaten)
+        long expectedId = 0L;
+        User expected = new User(expectedUsername, UserRole.REVIEWER);
+        expected.setId(expectedId);
+
+        when(this.userService.loginByUsername(expectedUsername)).thenReturn(expected);
+
+        this.mvc.perform(post("/api/login").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+                .content(expectedUsername)).andExpect(status().isOk()).andExpect(jsonPath("$.id", is(0)))
+                .andExpect(jsonPath("$.username", is(expectedUsername)));
+    }
+
+    @Test
+    void throwErrorWhenUsernameIsNotYetUsed() throws Exception{
+        String username = "Jens";
+
+        when(this.userService.loginByUsername(username)).thenThrow(
+                new IllegalArgumentException("Username could not be found"));
+
+        assertThatThrownBy(()-> this.mvc.perform(post("/api/login")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .accept(MediaType.APPLICATION_JSON)
+                                        .content(username)))
+                        .isExactlyInstanceOf(NestedServletException.class)
+                        .hasCauseExactlyInstanceOf(IllegalArgumentException.class)
+                        .hasMessageContaining("Username could not be found");
+    }
+
+
+
     private String asJsonString(final Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
