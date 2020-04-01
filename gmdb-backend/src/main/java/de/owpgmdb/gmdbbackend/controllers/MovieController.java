@@ -37,6 +37,7 @@ public class MovieController {
                 .average()
                 .orElse(-1.0));
         return movieDTO;
+        
     }
 
     @GetMapping("/movie/{id}")
