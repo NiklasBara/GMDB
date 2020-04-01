@@ -8,6 +8,7 @@ import de.owpgmdb.gmdbbackend.repositories.UserRepository;
 
 /**
  * UserService
+ * It is able to return a User by a Username
  */
 @Service
 public class UserService {
@@ -15,6 +16,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepo;
 
+    /**
+     * checks username 
+     * returns a User from database find by username
+     * @param username - username as String
+     * @return User from database
+     */
     public User loginByUsername(String username) {
         checkUsername(username);
 
@@ -23,6 +30,12 @@ public class UserService {
 
     }
 
+    /**
+     * checks username 
+     *  - if 3 < username.lenght < 20
+     *  - username != null
+     * @param username
+     */
     private void checkUsername(String username) {
         if (username == null) {
             throw new IllegalArgumentException("Username can not be null");
