@@ -90,5 +90,12 @@ public class UserServiceTest {
         Assertions.assertThat(actual).hasMessage(expectedMessage);
     }    
 
+    @Test
+    void whenUsernameIsNotFoundThrowIllegalArgException(){
+        String userName = "Jens";
+        String expectedMessage = "Username could not be found";
+        Exception actual = assertThrows(IllegalArgumentException.class, () -> this.service.loginByUsername(userName));
+        Assertions.assertThat(actual).hasMessage(expectedMessage);
+    }
 
 }

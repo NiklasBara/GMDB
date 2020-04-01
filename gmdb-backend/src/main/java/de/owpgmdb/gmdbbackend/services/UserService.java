@@ -17,7 +17,10 @@ public class UserService {
 
     public User loginByUsername(String username) {
         checkUsername(username);
-        return userRepo.findByUsername(username).get();
+
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Username could not be found"));
+
     }
 
     private void checkUsername(String username) {
