@@ -5,7 +5,7 @@ import {fetchMovieData} from "../action/fetchMovieData";
 const MovieOverview = (props) => {
 let fetchData = [];
   useEffect(()=> {
-   fetchData = props.fetchMovieData('http://localhost:8080/movie');
+   fetchData = props.fetchMovieData('http://localhost:8080/api/movies');
   }, []);
 
   return (

@@ -9,7 +9,7 @@ const MovieItem = props => {
       <div>{props.data.genre}</div>
       <div>{props.data.runtime}</div>
       <div>{props.data.rating}</div>
-      <Link to={`movie/details/${props.data.id}`}>Details...</Link>
+      <Link to={`/movie/details/${props.data.id}`}>Details...</Link>
     </div>
   );
 };
