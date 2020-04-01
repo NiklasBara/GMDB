@@ -51,7 +51,7 @@ public class MovieControllerTests {
         when(this.movieRepository.findAll()).thenReturn(returnList);
    
 
-        mvc.perform(get("/api/movies"))
+        mvc.perform(get("/api/movie"))
             .andExpect(status().isOk())
 			.andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$", hasSize(2)))
@@ -79,7 +79,7 @@ public class MovieControllerTests {
 
         when(this.movieRepository.findAll()).thenReturn(returnList);
 
-        mvc.perform(get("/api/movies"))
+        mvc.perform(get("/api/movie"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$", hasSize(1)))
@@ -96,7 +96,7 @@ public class MovieControllerTests {
         
         when(this.movieRepository.getOne(movie.getId())).thenReturn(movie);
 
-        mvc.perform(get("/api/movies/1"))
+        mvc.perform(get("/api/movie/1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.averageRating", is(-1.0)))

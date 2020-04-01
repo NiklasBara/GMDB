@@ -65,7 +65,7 @@ public class UserTest {
         User expected = new User(name, UserRole.REVIEWER);
         this.userRepo.save(expected);
 
-        User actual = this.userRepo.findByUsername(name);
+        User actual = this.userRepo.findByUsername(name).orElseThrow(()-> new AssertionError("User not found"));
         Assertions.assertThat(actual).isEqualTo(expected);
     }
 
@@ -86,4 +86,5 @@ public class UserTest {
         Assertions.assertThat(actual.getReviews()).isEqualTo(dbEntry.getReviews());
 
     }
+
 }

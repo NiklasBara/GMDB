@@ -20,7 +20,7 @@ public class MovieController {
     @Autowired
     private MovieRepository movieRepository;
 
-    @GetMapping("/movies")
+    @GetMapping("/movie")
     public List<MovieDTO> getAllMovies() {
         return movieRepository.findAll()
         .stream()
@@ -39,7 +39,7 @@ public class MovieController {
         return movieDTO;
     }
 
-    @GetMapping("/movies/{id}")
+    @GetMapping("/movie/{id}")
     public MovieDTO getMovieById(@PathVariable Long id) {
         Movie movie = movieRepository.getOne(id);
         MovieDTO movieDTO = calculateAverageRating(new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear()), movie);

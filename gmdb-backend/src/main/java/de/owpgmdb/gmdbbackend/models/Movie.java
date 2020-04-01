@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-public class Movie {
+public class Movie implements Reviewable {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -32,6 +32,11 @@ public class Movie {
     public Movie(String title, Long releaseYear) {
         this.title = title;
         this.releaseYear = releaseYear;
+    }
+
+    @Override
+    public void addReview(Review review) {
+        this.reviews.add(review);
     }
 
 }
