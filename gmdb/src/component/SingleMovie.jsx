@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 const SingleMovie = props => {
   let fetchData = {};
   useEffect(()=> {
-    fetchData = props.fetchSingleMovieData(`http://localhost:8080/movie/${props.match.params.id}`);
+    fetchData = props.fetchSingleMovieData(`http://localhost:8080/api/movies/${props.match.params.id}`);
   });
   return (
     <div>
