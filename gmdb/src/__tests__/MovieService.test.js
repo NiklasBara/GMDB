@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import MovieOverview from "../component/MovieOverview";
 import {act} from "react-dom/test-utils";
-
+import { MemoryRouter as Router } from "react-router-dom";
 const fakeData = [
     {
         id: 1,
@@ -36,17 +36,17 @@ test("testing fetches data from server", async(done) => {
     jest.spyOn(global, 'fetch').mockImplementation(() => mockFetchPromise);
     let component; 
     await act(async () => {
-       component = render(<MovieOverview store={store} />);
+       component = render(<Router><MovieOverview store={store} /></Router>);
     })
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(global.fetch).toHaveBeenCalledWith('http://localhost:8080/movie');
+    expect(global.fetch).toHaveBeenCalledWith('http://localhost:8080/api/movies');
 
     process.nextTick(() => { 
         const { queryAllByTestId } = component;
         const result = queryAllByTestId("movie-item");
         expect(result.length).toEqual(2);
-
+        
         global.fetch.mockClear(); 
         done(); 
     });
