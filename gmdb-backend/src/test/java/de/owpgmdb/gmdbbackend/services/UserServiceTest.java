@@ -1,6 +1,9 @@
 package de.owpgmdb.gmdbbackend.services;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import de.owpgmdb.gmdbbackend.models.User;
+import de.owpgmdb.gmdbbackend.models.UserRole;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
 
 /**
@@ -55,5 +60,35 @@ public class UserServiceTest {
         Exception actual = assertThrows(IllegalArgumentException.class, () -> this.service.loginByUsername(usernameWithTwoChars));
         Assertions.assertThat(actual).hasMessage(expectedMessage);
     }
-    
+
+    @Test
+    void whenUsernameIsMoreThanTwentyCharsThrowIllegalArgException() {
+        String usernameWithTwentyOneChars = "abcdefghijklmnopqrstu";
+        String expectedMessage = "Username is more than 20 chars";
+
+        Exception actual = assertThrows(IllegalArgumentException.class, () -> this.service.loginByUsername(usernameWithTwentyOneChars));
+        Assertions.assertThat(actual).hasMessage(expectedMessage);
+    }
+
+    @Test
+    void returnUserWithGivenUsername() {
+        String username = "Jan";
+        User expectedUser = new User(username, UserRole.REVIEWER);
+        expectedUser.setId(0L);
+        when(this.userRepo.findByUsername(username)).thenReturn(Optional.of(expectedUser));
+
+        User actualUser = service.loginByUsername(username);
+
+        Assertions.assertThat(actualUser).isEqualTo(expectedUser);
+    }
+
+    @Test
+    void whenUsernameIsNullThrowIllegalArgException(){
+        String usernameIsNull = null;
+        String expectedMessage = "Username can not be null";
+        Exception actual = assertThrows(IllegalArgumentException.class, () -> this.service.loginByUsername(usernameIsNull));
+        Assertions.assertThat(actual).hasMessage(expectedMessage);
+    }    
+
+
 }
