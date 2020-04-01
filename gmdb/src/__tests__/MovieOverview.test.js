@@ -5,6 +5,7 @@ import rootReducer from "../reducer/rootReducer";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import {act} from "react-dom/test-utils";
+import { MemoryRouter as Router } from "react-router-dom";
 
 const fakeData = [
   {
@@ -37,7 +38,7 @@ beforeEach(async() => {
   jest.spyOn(global, 'fetch').mockImplementation(() => mockFetchPromise);
 
     await act(async () => {
-       component = render(<MovieOverview store={store} />);
+       component = render(<Router><MovieOverview store={store} /></Router>);
     })
 });
 
