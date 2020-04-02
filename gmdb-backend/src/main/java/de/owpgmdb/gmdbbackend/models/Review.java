@@ -9,10 +9,12 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * Review
@@ -21,10 +23,11 @@ import lombok.RequiredArgsConstructor;
 @Data
 @Entity
 @RequiredArgsConstructor
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
@@ -34,12 +37,14 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     @JsonIgnoreProperties({"reviews", "ratings"})
+    @ToString.Exclude
     private Movie movie;
     
     @NonNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"reviews", "ratings"})
+    @ToString.Exclude
     private User user;
 
     //tbd remove?

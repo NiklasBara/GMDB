@@ -28,11 +28,11 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route path="/movie/details/:id" component={SingleMovie} />
         <Route path="/movie">
           <MovieOverview data={data} />
         </Route>
         <Route path="/" component={Home} />
-        <Route path="/movie/details/:id" component={SingleMovie} />
       </Switch>
     </Router>
   );

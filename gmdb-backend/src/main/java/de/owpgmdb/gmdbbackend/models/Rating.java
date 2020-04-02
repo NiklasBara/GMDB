@@ -18,9 +18,10 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @Data
 @RequiredArgsConstructor
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Rating {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 

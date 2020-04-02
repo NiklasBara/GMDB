@@ -1,17 +1,15 @@
 package de.owpgmdb.gmdbbackend.models.dtos;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import de.owpgmdb.gmdbbackend.models.Review;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 /**
  * ReviewDTO
  */
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ReviewRequestDTO {
 
     private Long userId;

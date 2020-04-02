@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,11 +25,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "user_account")
 @Entity
-@EqualsAndHashCode(exclude = {"reviews", "ratings"})
+@EqualsAndHashCode(exclude = { "reviews", "ratings" })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class User implements Reviewable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String username;
@@ -38,12 +38,12 @@ public class User implements Reviewable {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 
-    @JsonIgnoreProperties({"user", "hibernateLazyInitializer", "handler"}) 
+    @JsonIgnoreProperties("user")
     private Set<Rating> ratings = new HashSet<>();
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 
-    @JsonIgnoreProperties({"user", "hibernateLazyInitializer", "handler"}) 
+    @JsonIgnoreProperties("user")
     private Set<Review> reviews = new HashSet<>();
 
     public User(String username, UserRole role) {
@@ -62,7 +62,5 @@ public class User implements Reviewable {
         this.reviews.remove(review);
         review.setUser(null);
     }
-
-
 
 }

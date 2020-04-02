@@ -2,6 +2,8 @@ package de.owpgmdb.gmdbbackend.models.dtos;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import de.owpgmdb.gmdbbackend.models.Review;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class MovieDTO {
 
     @NonNull
