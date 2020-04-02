@@ -6,7 +6,7 @@ const SingleMovie = props => {
   let fetchData = {};
   useEffect(() => {
     fetchData = props.fetchSingleMovieData(`http://localhost:8080/api/movie/${props.match.params.id}`);
-  });
+  }, []);
   return (
     <div>
       <div>{props.data.id}</div>

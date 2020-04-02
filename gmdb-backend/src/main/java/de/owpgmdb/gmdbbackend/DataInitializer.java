@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import de.owpgmdb.gmdbbackend.repositories.ReviewRepository;
 import de.owpgmdb.gmdbbackend.repositories.UserRepository;
 
 @Component
+@Profile("!test")
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
@@ -31,7 +33,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... strings) {
         createTestData();
     }
-@Transactional
+    @Transactional
     private void createTestData() {
 
         Movie movie1 = movieRepository.save(new Movie("Film 1", 1998L));
