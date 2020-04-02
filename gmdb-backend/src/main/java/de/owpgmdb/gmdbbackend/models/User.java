@@ -13,7 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -23,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "user_account")
 @Entity
+@EqualsAndHashCode(exclude = {"reviews", "ratings"})
 public class User implements Reviewable {
 
     @Id
@@ -31,9 +35,15 @@ public class User implements Reviewable {
     @Column(unique = true)
     private String username;
     private UserRole role;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @JsonIgnoreProperties({"user", "hibernateLazyInitializer", "handler"}) 
     private Set<Rating> ratings = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @JsonIgnoreProperties({"user", "hibernateLazyInitializer", "handler"}) 
     private Set<Review> reviews = new HashSet<>();
 
     public User(String username, UserRole role) {
@@ -44,6 +54,15 @@ public class User implements Reviewable {
     @Override
     public void addReview(Review review) {
         this.reviews.add(review);
+        review.setUser(this);
     }
+
+    @Override
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        review.setUser(null);
+    }
+
+
 
 }

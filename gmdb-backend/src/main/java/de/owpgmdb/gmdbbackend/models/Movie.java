@@ -11,12 +11,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(exclude = {"reviews", "ratings"})
 public class Movie implements Reviewable {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,9 +28,13 @@ public class Movie implements Reviewable {
     private Long id;
     private String title;
     private Long releaseYear;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("movie")
     private Set<Rating> ratings = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("movie")
     private Set<Review> reviews = new HashSet<>();
 
     public Movie(String title, Long releaseYear) {
@@ -37,6 +45,13 @@ public class Movie implements Reviewable {
     @Override
     public void addReview(Review review) {
         this.reviews.add(review);
+        review.setMovie(this);
+    }
+
+    @Override
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+        review.setMovie(null);
     }
 
 }

@@ -9,4 +9,5 @@ public interface Reviewable {
      * @param review - The Review that will be saved
      */
     void addReview(Review review);
+    void removeReview(Review review);
 }
