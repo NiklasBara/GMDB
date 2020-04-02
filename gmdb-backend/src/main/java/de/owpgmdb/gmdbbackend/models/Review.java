@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
  * Review
@@ -34,12 +35,14 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     @JsonIgnoreProperties({"reviews", "ratings"})
+    @ToString.Exclude
     private Movie movie;
     
     @NonNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"reviews", "ratings"})
+    @ToString.Exclude
     private User user;
 
     //tbd remove?
