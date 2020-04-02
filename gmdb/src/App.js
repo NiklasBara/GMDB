@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./component/Home";
 import MovieOverview from "./component/MovieOverview";
+import SingleMovie from "./component/SingleMovie";
 
 const data = [
   {
@@ -31,6 +32,7 @@ const App = () => {
           <MovieOverview data={data} />
         </Route>
         <Route path="/" component={Home} />
+        <Route path="/movie/details/:id" component={SingleMovie} />
       </Switch>
     </Router>
   );
