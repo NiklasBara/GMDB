@@ -64,6 +64,42 @@ public class DataInitializer implements CommandLineRunner {
         movie7.setGenre("Crime, Drama, Mystery");
         movie7.setRuntime(127);
 
+        Movie movie8 = movieRepository.save(new Movie("Der Pate", 1972L));
+        movie8.setGenre("Crime, Drama");
+        movie8.setRuntime(177);
+
+        Movie movie9 = movieRepository.save(new Movie("Der Pate 2", 1974L));
+        movie9.setGenre("Crime, Drama");
+        movie9.setRuntime(202);
+
+        Movie movie10 = movieRepository.save(new Movie("Die Veruteilten", 1994L));
+        movie10.setGenre("Drama");
+        movie10.setRuntime(142);
+
+        Movie movie11 = movieRepository.save(new Movie("The Dark Knight", 2008L));
+        movie11.setGenre("Action, Crime, Drama");
+        movie11.setRuntime(152);
+
+        Movie movie12 = movieRepository.save(new Movie("Schindlers Liste", 1993L));
+        movie12.setGenre("Biography, Drama, History");
+        movie12.setRuntime(195);
+
+        Movie movie13 = movieRepository.save(new Movie("Zwei glorreiche Halunken", 1966L));
+        movie13.setGenre("Western");
+        movie13.setRuntime(161);
+
+        Movie movie14 = movieRepository.save(new Movie("Der Herr der Ringe: Die Gefährten", 2001L));
+        movie14.setGenre("Action, Adventure, Drama");
+        movie14.setRuntime(178);
+
+        Movie movie15 = movieRepository.save(new Movie("Der Herr der Ringe: Die Rückkehr des Königs", 2003L));
+        movie15.setGenre("Action, Drama, Fantasy");
+        movie15.setRuntime(201);
+
+        Movie movie16 = movieRepository.save(new Movie("Das Leben ist schön", 1997L));
+        movie16.setGenre("Comedy, Drama, Romance");
+        movie16.setRuntime(116);
+
         User user1 = userRepository.save(new User("Jens", UserRole.REVIEWER));
         User user2 = userRepository.save(new User("Alois", UserRole.ADMIN));
 
@@ -72,7 +108,7 @@ public class DataInitializer implements CommandLineRunner {
         movie1.addReview(review1);
         user1.addReview(review1);
         
-        movieRepository.saveAll(Arrays.asList(movie1, movie2, movie3,movie4,movie5,movie6,movie7));
+        movieRepository.saveAll(Arrays.asList(movie1, movie2, movie3,movie4,movie5,movie6,movie7, movie8, movie9, movie10, movie11, movie12, movie13, movie14,movie15,movie16));
         userRepository.saveAll(Arrays.asList(user1, user2));
 
     }

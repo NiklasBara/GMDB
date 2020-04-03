@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./component/Home";
 import MovieOverview from "./component/MovieOverview";
 import SingleMovie from "./component/SingleMovie";
+import NavBar from "./component/NavBar";
 
 const data = [
   {
@@ -27,6 +28,7 @@ const data = [
 const App = () => {
   return (
     <Router>
+      <NavBar />
       <Switch>
         <Route path="/movie/details/:id" component={SingleMovie} />
         <Route path="/movie">
@@ -34,7 +36,7 @@ const App = () => {
         </Route>
         <Route path="/" component={Home} />
       </Switch>
-    </Router>
+    </Router >
   );
 };
 
