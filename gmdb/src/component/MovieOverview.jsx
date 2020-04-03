@@ -1,17 +1,20 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import MovieItem from "./MovieItem.jsx";
-import {connect} from "react-redux";
-import {fetchMovieData} from "../action/fetchMovieData";
+import { connect } from "react-redux";
+import { fetchMovieData } from "../action/fetchMovieData";
+import s from "../styles/MovieOverview.module.css";
+
+
 const MovieOverview = (props) => {
-let fetchData = [];
-  useEffect(()=> {
-   fetchData = props.fetchMovieData('http://localhost:8080/api/movie');
+  let fetchData = [];
+  useEffect(() => {
+    fetchData = props.fetchMovieData('http://localhost:8080/api/movie');
   }, []);
 
   return (
     <div>
       {props.movie.map(movie => (
-        <div key={movie.id} data-testid="movie-item">
+        <div className={s["movie-item"]} key={movie.id} data-testid="movie-item">
           <MovieItem data={movie} />
         </div>
       ))}
