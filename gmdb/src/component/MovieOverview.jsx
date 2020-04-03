@@ -6,6 +6,14 @@ import s from "../styles/MovieOverview.module.css";
 import { Container, Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Image from '../img/Background.jpg';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundImage: `url(${Image})`
+  },
+}));
 
 const MovieOverview = (props) => {
   let fetchData = [];
@@ -16,6 +24,7 @@ const MovieOverview = (props) => {
   const theme = {
     spacing: 5,
   }
+  const classes = useStyles();
 
   if (props.pending) {
     return (
