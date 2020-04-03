@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+
 export default class AppNavbar extends Component {
     constructor(props) {
         super(props);
@@ -19,19 +20,19 @@ export default class AppNavbar extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                     <NavItem>
-                        <NavLink tag={Link} to="/login">Login</NavLink>
+                        <NavLink tag={Link} to="/">Home</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/groups">Groups</NavLink>
+                        <NavLink tag={Link} to="/movie">Movies</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/users">Users</NavLink>
+                        <NavLink tag={Link} to="/">Link 3</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/usersv2">Users V2</NavLink>
+                        <NavLink tag={Link} to="/">Link 4</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/test">Test</NavLink>
+                        <NavLink tag={Link} to="/">Link 5</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>

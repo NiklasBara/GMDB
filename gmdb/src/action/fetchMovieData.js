@@ -25,6 +25,7 @@ const fetchMovieData = (apiUrl) => {
                 if (res.error) {
                     throw res.error;
                 }
+                // setTimeout(() => dispatch(fetchData(res)), 200)
                 dispatch(fetchData(res))
                 return res;
             })

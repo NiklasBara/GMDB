@@ -66,7 +66,7 @@ export default function BackToTop(props) {
             <CssBaseline />
             <AppBar>
                 <Toolbar>
-                    <Link underline="none" color="textPrimary" component={RouterLink} to={"/movie"}>Overview</Link>
+                    <Link variant="body2" underline="none" color="error" component={RouterLink} to={"/movie"}>Overview</Link>
                 </Toolbar>
             </AppBar>
             <Toolbar id="back-to-top-anchor" />
