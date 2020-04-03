@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
   },
+  header: {
+
+  },
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
@@ -58,17 +61,25 @@ const MovieItem = props => {
 
   return (
     <Card className={classes.root}>
+      <CardHeader className={classes.header} title={props.data.title} subheader={`Avg. Rating: ${props.data.rating}`} />
+      <CardMedia
+        className={classes.media}
+        //   image={require("../img/Film1.jpg")}
+        image={require(`../img/${props.data.title}.jpg`)}
+        title="King Kong"
+      />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">{props.data.id}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{props.data.title}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{props.data.year}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{props.data.genre}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{props.data.runtime}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{props.data.rating}</Typography>
+
+        <Typography variant="body2" color="textSecondary" component="p">{`ID: ${props.data.id}`}</Typography>
+        <Typography variant="body2" color="textSecondary" component="p">{`Release-Year: ${props.data.year}`}</Typography>
+        <Typography variant="body2" color="textSecondary" component="p">{`Genre: ${props.data.genre}`}</Typography>
+        <Typography variant="body2" color="textSecondary" component="p">{`Runtime: ${props.data.runtime}`}</Typography>
+      </CardContent>
+      <CardActions disableSpacing>
         <IconButton aria-label="Go to Details" component={Link} to={`/movie/details/${props.data.id}`}>
           <MovieIcon />
         </IconButton>
-      </CardContent>
+      </CardActions>
     </Card>
   );
 };

@@ -1,3 +1,7 @@
 .movie-item {
-    padding:10px;   
+    padding:10px;
+
+}
+.movie-overview{
+    display:flex;
 }

@@ -12,13 +12,15 @@ const MovieOverview = (props) => {
   }, []);
 
   return (
-    <div>
-      {props.movie.map(movie => (
+    <div className={s["movie-overview"]} >
+    {
+      props.movie.map(movie => (
         <div className={s["movie-item"]} key={movie.id} data-testid="movie-item">
           <MovieItem data={movie} />
         </div>
-      ))}
-    </div>
+      ))
+    }
+    </div >
   );
 };
 const mapStateToProps = state => {

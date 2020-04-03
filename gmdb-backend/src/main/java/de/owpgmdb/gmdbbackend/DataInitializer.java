@@ -36,9 +36,17 @@ public class DataInitializer implements CommandLineRunner {
     @Transactional
     private void createTestData() {
 
-        Movie movie1 = movieRepository.save(new Movie("Film 1", 1998L));
-        Movie movie2 = movieRepository.save(new Movie("Film 2", 2001L));
-        Movie movie3 = movieRepository.save(new Movie("Film 3", 2020L));
+        Movie movie1 = movieRepository.save(new Movie("King Kong", 2005L));
+        movie1.setGenre("Action, Adventure, Drama");
+        movie1.setRuntime(187);
+        
+        Movie movie2 = movieRepository.save(new Movie("Star Wars", 1977L));
+        movie2.setGenre("Action, Adventure, Fantasy");
+        movie2.setRuntime(121);
+
+        Movie movie3 = movieRepository.save(new Movie("The Final Programme", 1973L));
+        movie3.setGenre("Sci-Fi");
+        movie3.setRuntime(81);
 
         User user1 = userRepository.save(new User("Jens", UserRole.REVIEWER));
         User user2 = userRepository.save(new User("Alois", UserRole.ADMIN));
