@@ -1,27 +1,24 @@
 import React, { useEffect } from "react";
 import { fetchSingleMovieData } from "../action/fetchSingleMovieData";
 import { connect } from "react-redux";
-
+import MovieItem from "./MovieItem";
+import Box from '@material-ui/core/Box';
 const SingleMovie = props => {
   let fetchData = {};
   useEffect(() => {
     fetchData = props.fetchSingleMovieData(`http://localhost:8080/api/movie/${props.match.params.id}`);
   }, []);
   return (
-    <div>
-      <div>{props.data.id}</div>
-      <div>{props.data.title}</div>
-      <div>{props.data.year}</div>
-      <div>{props.data.genre}</div>
-      <div>{props.data.runtime}</div>
-      <div>{props.data.rating}</div>
+    <Box mt={5} ml="25%" mr="25%">
+      <MovieItem data={props.data} />
       <div>
         {
           props.data.reviews.map(review => {
             return <div key={review.id}>{review.text}</div>
           })
         }</div>
-    </div>
+    </Box>
+
   );
 };
 const mapStateToProps = state => {

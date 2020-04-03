@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Button } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
@@ -66,7 +66,8 @@ export default function BackToTop(props) {
             <CssBaseline />
             <AppBar>
                 <Toolbar>
-                    <Link variant="body2" underline="none" color="error" component={RouterLink} to={"/movie"}>Overview</Link>
+                    <Button color="inherit" component={RouterLink} to={"/"} > Home </Button>
+                    <Button color="inherit" component={RouterLink} to={"/movie"} > Movies </Button>
                 </Toolbar>
             </AppBar>
             <Toolbar id="back-to-top-anchor" />
