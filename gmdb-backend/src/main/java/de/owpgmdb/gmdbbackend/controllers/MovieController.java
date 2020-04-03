@@ -27,7 +27,7 @@ public class MovieController {
         return movieRepository.findAll()
         .stream()
         .map(movie -> {
-            MovieDTO movieDTO = new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear());
+            MovieDTO movieDTO = new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear(),movie.getRuntime(),movie.getGenre());
             return calculateAverageRating(movieDTO, movie);})
         .collect(Collectors.toList());
     }
@@ -45,7 +45,7 @@ public class MovieController {
     @GetMapping("/movie/{id}")
     public MovieDTO getMovieById(@PathVariable Long id) {
         Movie movie = movieRepository.getOne(id);
-        MovieDTO movieDTO = calculateAverageRating(new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear()), movie);
+        MovieDTO movieDTO = calculateAverageRating(new MovieDTO(movie.getId(), movie.getTitle(), movie.getReleaseYear(),movie.getRuntime(),movie.getGenre()), movie);
         movieDTO.setReviews(movie.getReviews());
         
         return  movieDTO;

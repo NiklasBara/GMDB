@@ -28,6 +28,8 @@ public class Movie implements Reviewable {
     private Long id;
     private String title;
     private Long releaseYear;
+    private String genre;
+    private int runtime;
     
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("movie")
