@@ -3,6 +3,7 @@ import MovieItem from "./MovieItem.jsx";
 import { connect } from "react-redux";
 import { fetchMovieData } from "../action/fetchMovieData";
 import s from "../styles/MovieOverview.module.css";
+import { Container, Grid } from '@material-ui/core';
 
 
 const MovieOverview = (props) => {
@@ -12,15 +13,19 @@ const MovieOverview = (props) => {
   }, []);
 
   return (
-    <div className={s["movie-overview"]} >
-    {
-      props.movie.map(movie => (
-        <div className={s["movie-item"]} key={movie.id} data-testid="movie-item">
-          <MovieItem data={movie} />
-        </div>
-      ))
-    }
-    </div >
+    <Container maxWidth="xl">
+      <Grid container spacing={5}>
+        
+          {
+            props.movie.map(movie => (
+              <Grid item xl={4} key={movie.id} data-testid="movie-item">
+                <MovieItem data={movie} />
+              </Grid>
+            ))
+          }
+        
+      </Grid>
+    </Container >
   );
 };
 const mapStateToProps = state => {

@@ -25,6 +25,10 @@ public class MovieDTO {
     private String title;
     @NonNull
     private Long releaseYear;
+    @NonNull
+    private Integer runtime;
+    @NonNull
+    private String genre;
 
     private Double averageRating;
     private Set<Review> reviews;

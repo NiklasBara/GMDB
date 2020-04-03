@@ -14,15 +14,17 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
+import HeartIcon from '@material-ui/icons/Favorite';
 import MovieIcon from '@material-ui/icons/Movie';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import Link from '@material-ui/core/Link'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    // maxWidth: 600,
+    // minWidth: 600,
   },
   header: {
 
@@ -46,7 +48,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+const tryRequire = title => {
+  try {
+    return require(`../img/${title}.jpg`);
+  } catch (err) {
+    return require(`../img/placeholder.jpg`);
+  }
+}
 
 
 const MovieItem = props => {
@@ -54,6 +62,7 @@ const MovieItem = props => {
   const classes = useStyles();
 
   const [expanded, setExpanded] = useState(false);
+  const [iconClicked, setIconClicked] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -61,22 +70,26 @@ const MovieItem = props => {
 
   return (
     <Card className={classes.root}>
-      <CardHeader className={classes.header} title={props.data.title} subheader={`Avg. Rating: ${props.data.rating}`} />
-      <CardMedia
-        className={classes.media}
-        //   image={require("../img/Film1.jpg")}
-        image={require(`../img/${props.data.title}.jpg`)}
-        title="King Kong"
-      />
-      <CardContent>
-
-        <Typography variant="body2" color="textSecondary" component="p">{`ID: ${props.data.id}`}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{`Release-Year: ${props.data.year}`}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{`Genre: ${props.data.genre}`}</Typography>
-        <Typography variant="body2" color="textSecondary" component="p">{`Runtime: ${props.data.runtime}`}</Typography>
-      </CardContent>
+      <Link color='textPrimary' underline='none' component={RouterLink} to={`/movie/details/${props.data.id}`}>
+        <CardHeader className={classes.header} title={props.data.title} subheader={`Avg. Rating: ${props.data.averageRating !== -1 ? props.data.averageRating : 'kein Rating vorhanden'}`} />
+        <CardMedia
+          className={classes.media}
+          //   image={require("../img/Film1.jpg")}
+          image={tryRequire(props.data.title)}
+          title={props.data.title}
+        />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">{`ID: ${props.data.id}`}</Typography>
+          <Typography variant="body2" color="textSecondary" component="p">{`Release-Year: ${props.data.releaseYear}`}</Typography>
+          <Typography variant="body2" color="textSecondary" component="p">{`Genre: ${props.data.genre}`}</Typography>
+          <Typography variant="body2" color="textSecondary" component="p">{`Runtime: ${props.data.runtime} Minutes`}</Typography>
+        </CardContent>
+      </Link>
       <CardActions disableSpacing>
-        <IconButton aria-label="Go to Details" component={Link} to={`/movie/details/${props.data.id}`}>
+        <IconButton color={iconClicked ? "secondary" : "default"} onClick={() => setIconClicked(!iconClicked)} aria-label="Favorite" >
+          <HeartIcon />
+        </IconButton>
+        <IconButton aria-label="Add to Watchlist" >
           <MovieIcon />
         </IconButton>
       </CardActions>
